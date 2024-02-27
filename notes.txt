@@ -1,0 +1,263 @@
+
+
+        const pageElements = figma.currentPage.children;
+
+        // Get saved text styles
+        const savedTextStyles = figma.getLocalTextStyles();
+
+        // Initialize a list to store items that need fixing
+        const itemsToFix = [];
+
+        // Loop through each element on the page
+        for (const element of pageElements) {
+        if (element.type === "TEXT") {
+            // Retrieve the text style of the element
+            const elementTextStyle = element.textStyleId;
+
+            // Find the corresponding saved text style
+            const savedStyle = savedTextStyles.find((style) => style.id === elementTextStyle);
+
+            if (!savedStyle) {
+            // Element is not assigned a style, so compare with all styles
+            let bestMatchStyle = null;
+            let bestMatchDifference = Number.MAX_VALUE;
+
+            for (const style of savedTextStyles) {
+                // Compare attributes dynamically
+                let difference = 0;
+                for (const attribute in element) {
+                if (element.hasOwnProperty(attribute) && style.hasOwnProperty(attribute)) {
+                    difference += Math.abs(element[attribute] - style[attribute]);
+                }
+                }
+
+                if (difference < bestMatchDifference) {
+                bestMatchDifference = difference;
+                bestMatchStyle = style;
+                }
+            }
+
+            if (bestMatchStyle) {
+                // Flag the element with the best matching style
+                itemsToFix.push(`Fix style for element ${element.name}. It aligns with ${bestMatchStyle.name}.`);
+            }
+            } else {
+            // Element is assigned a style, compare attributes with that style
+            for (const attribute in element) {
+                if (element.hasOwnProperty(attribute) && savedStyle.hasOwnProperty(attribute)) {
+                if (element[attribute] !== savedStyle[attribute]) {
+                    itemsToFix.push(`Fix ${attribute} for element ${element.name}`);
+                }
+                }
+            }
+            }
+        }
+        }
+
+        // Log the items that need fixing
+        console.log("Items to Fix:", itemsToFix);
+        return itemsToFix;
+
+
+
+
+
+
+
+
+
+         // new below 
+        // Define the button click handler
+        // document.getElementById('runTestButton').addEventListener('click', function () {
+        //     // Trigger your Figma plugin logic here
+        //     // Call your Figma plugin functions and update the 'results' div
+        //     const results = runFigmaPluginLogic();
+        //     document.getElementById('results').textContent = results;
+        // });
+
+        // // Define a function to call your Figma plugin logic
+        // function runFigmaPluginLogic() {
+        //     // Your Figma plugin logic goes here
+        //     // Return the results as a string
+        //     return "Plugin results will be displayed here.";
+        // }
+
+
+        // KEEP1 - how to send/receive messages from JS
+        // document.getElementById('runTestButton').onclick = () => {
+        //     const type = "runTest";
+        //     const data = " 1234";
+        //     parent.postMessage({ pluginMessage: {type, data} }, '*')
+        // };
+
+        // onmessage = (event) => {
+        //     document.getElementById('results').innerHTML = event.data.pluginMessage.word;
+        //     console.log("got this from the plugin code", event.data.pluginMessage.word);
+        //     }
+
+
+
+
+
+
+
+
+
+        // LEARNED TASKS -----------------------
+    // change style to something 
+    // var paintStyles = figma.getLocalPaintStyles();
+    // figma.getStyleById(paintStyles[1].id).paints = [ { type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.4, g: 0, b: 0 } } ] 
+    // -------------------------------------
+
+    // figma.ui.onmessage = (msg) => {
+    //     // if (msg.type === 'runTest') {
+    //     //   // Perform your testing logic here
+    //     //   const results = runTestLogic();
+    //     //   // Display results in the UI
+    //     //   figma.ui.postMessage({ type: 'displayResults', results });
+    //     // }
+    //         if (msg.type === 'runTest') {
+    //             // Perform your testing logic here
+    //             // For this test, you don't need additional logic
+    //             figma.ui.postMessage({ type: 'displayResults', results: "Test button clicked!" });
+    //         }
+    //         console.log("Clicked");
+    // };
+
+
+
+// function runTestLogic() {
+//     // Get all elements on the current page
+//     const pageElements = figma.currentPage.children;
+
+//     // Get saved text styles
+//     const savedTextStyles = figma.getLocalTextStyles();
+
+//     // Initialize a list to store items that need fixing
+//     const itemsToFix = [];
+
+//     // Loop through each element on the page
+//     for (const element of pageElements) {
+//     if (element.type === "TEXT") {
+//         // Retrieve the text style of the element
+//         const elementTextStyle = element.textStyleId;
+
+//         // Find the corresponding saved text style
+//         const savedStyle = savedTextStyles.find((style) => style.id === elementTextStyle);
+
+//         if (!savedStyle) {
+//         // Element is not assigned a style, so compare with all styles
+//         let bestMatchStyle = null;
+//         let bestMatchDifference = Number.MAX_VALUE;
+
+//         for (const style of savedTextStyles) {
+//             // Compare attributes dynamically
+//             let difference = 0;
+//             for (const attribute in element) {
+//             if (element.hasOwnProperty(attribute) && style.hasOwnProperty(attribute)) {
+//                 difference += Math.abs(element[attribute] - style[attribute]);
+//             }
+//             }
+
+//             if (difference < bestMatchDifference) {
+//             bestMatchDifference = difference;
+//             bestMatchStyle = style;
+//             }
+//         }
+
+//         if (bestMatchStyle) {
+//             // Flag the element with the best matching style
+//             itemsToFix.push(`Fix style for element ${element.name}. It aligns with ${bestMatchStyle.name}.`);
+//         }
+//         } else {
+//         // Element is assigned a style, compare attributes with that style
+//         for (const attribute in element) {
+//             if (element.hasOwnProperty(attribute) && savedStyle.hasOwnProperty(attribute)) {
+//             if (element[attribute] !== savedStyle[attribute]) {
+//                 itemsToFix.push(`Fix ${attribute} for element ${element.name}`);
+//             }
+//             }
+//         }
+//         }
+//     }
+//     }
+
+//     // Log the items that need fixing
+//     console.log("Items to Fix:", itemsToFix);
+//     return itemsToFix;
+
+
+// }
+
+    // figma.closePlugin();
+    // DELETE BELOW ***********************************************************
+
+    // Calls to "parent.postMessage" from within the HTML page will trigger this
+    // callback. The callback will be passed the "pluginMessage" property of the
+    // posted message.
+//     figma.ui.onmessage = msg => {
+//         // One way of distinguishing between different types of messages sent from
+//         // your HTML page is to use an object with a "type" property like this.
+//         if (msg.type === 'create-shapes') {
+//             const nodes = [];
+//             for (let i = 0; i < msg.count; i++) {
+//                 const rect = figma.createRectangle();
+//                 rect.x = i * 150;
+//                 rect.fills = [{ type: 'SOLID', color: { r: 1, g: 0.5, b: 0 } }];
+//                 figma.currentPage.appendChild(rect);
+//                 nodes.push(rect);
+//             }
+//             figma.currentPage.selection = nodes;
+//             figma.viewport.scrollAndZoomIntoView(nodes);
+//         }
+//         // Make sure to close the plugin when you're done. Otherwise the plugin will
+//         // keep running, which shows the cancel button at the bottom of the screen.
+//         figma.closePlugin();
+//     };
+// }
+// // Runs this code if the plugin is run in FigJam
+// if (figma.editorType === 'figjam') {
+//     // This plugin will open a window to prompt the user to enter a number, and
+//     // it will then create that many shapes and connectors on the screen.
+//     // This shows the HTML page in "ui.html".
+//     figma.showUI(__html__);
+//     // Calls to "parent.postMessage" from within the HTML page will trigger this
+//     // callback. The callback will be passed the "pluginMessage" property of the
+//     // posted message.
+//     figma.ui.onmessage = msg => {
+//         // One way of distinguishing between different types of messages sent from
+//         // your HTML page is to use an object with a "type" property like this.
+//         if (msg.type === 'create-shapes') {
+//             const numberOfShapes = msg.count;
+//             const nodes = [];
+//             for (let i = 0; i < numberOfShapes; i++) {
+//                 const shape = figma.createShapeWithText();
+//                 // You can set shapeType to one of: 'SQUARE' | 'ELLIPSE' | 'ROUNDED_RECTANGLE' | 'DIAMOND' | 'TRIANGLE_UP' | 'TRIANGLE_DOWN' | 'PARALLELOGRAM_RIGHT' | 'PARALLELOGRAM_LEFT'
+//                 shape.shapeType = 'ROUNDED_RECTANGLE';
+//                 shape.x = i * (shape.width + 200);
+//                 shape.fills = [{ type: 'SOLID', color: { r: 1, g: 0.5, b: 0 } }];
+//                 figma.currentPage.appendChild(shape);
+//                 nodes.push(shape);
+//             }
+//             ;
+//             for (let i = 0; i < (numberOfShapes - 1); i++) {
+//                 const connector = figma.createConnector();
+//                 connector.strokeWeight = 8;
+//                 connector.connectorStart = {
+//                     endpointNodeId: nodes[i].id,
+//                     magnet: 'AUTO',
+//                 };
+//                 connector.connectorEnd = {
+//                     endpointNodeId: nodes[i + 1].id,
+//                     magnet: 'AUTO',
+//                 };
+//             }
+//             ;
+//             figma.currentPage.selection = nodes;
+//             figma.viewport.scrollAndZoomIntoView(nodes);
+//         }
+//         // Make sure to close the plugin when you're done. Otherwise the plugin will
+//         // keep running, which shows the cancel button at the bottom of the screen.
+//         figma.closePlugin();
+//     };
+// }
