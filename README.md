@@ -13,7 +13,7 @@ Receive intelligent style guide suggestions based on your design file. Enhance y
 **Why Choose DESY**<br>
 Enhance collaboration, boost efficiency, and elevate brand consistency with DESY – the ultimate Figma tool for design system management, CSS export, and style guide refinement.
 
-Try out the plugin for yourself [here](https://www.figma.com/community/plugin/1298509817622924152/desy)
+Try the plugin for yourself [here](https://www.figma.com/community/plugin/1298509817622924152/desy)
 
 # About 
 The DESY plugin was created in Fall 2023 as an MVP for a startup founded in an on campus startup incubator. I am the sole developer on the founding team, co-founding with two designers. We hope to expand this MVP to create a web-based platform that brings a multitude of resources to both designers and developers that use DESY.
